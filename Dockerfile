@@ -1,28 +1,23 @@
-# Use Ubuntu Version 14
+# Use Ubuntu Version 16
 FROM ubuntu:16.04
 
 MAINTAINER Xia Lab "jasmine.chong@mail.mcgill.ca"
 
-LABEL Description = "MetaboAnalyst 4.0, includes the installation of all necessary system requirements including JDK, R plus all relevant packages, and Payara Micro."
+LABEL Description = "MetaboAnalyst 4.93, includes the installation of all necessary system requirements including JDK, R plus all relevant packages, and Payara Micro."
 
 # Install and set up project dependencies (netcdf library for XCMS, imagemagick and 
 # graphviz libraries for RGraphviz), then purge apt-get lists.
 # Thank you to Jack Howarth for his contributions in improving the Dockerfile.
 
 RUN apt-get update && \
-    apt-get install -y software-properties-common sudo
-    
-RUN apt-get update && \
-    add-apt-repository ppa:webupd8team/java && \
-    apt-get update && \
-    echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \ 
-    echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/" >> /etc/apt/sources.list && \
-    gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9 && \
-    gpg -a --export E084DAB9 | sudo apt-key add - && \
-    apt-get update && \
+    apt-get install -y software-properties-common && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B1998361219BD9C9 && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 51716619E084DAB9 && \
+    add-apt-repository 'deb http://repos.azulsystems.com/ubuntu stable main' && \
+    add-apt-repository 'deb http://cran.rstudio.com/bin/linux/ubuntu xenial/' && \
+    apt update && \
     apt-get install -y \   
-    oracle-java8-installer \
-    oracle-java8-set-default \
+    zulu-8 \
     graphviz \
     imagemagick \
     libcairo2-dev \
@@ -37,9 +32,7 @@ RUN apt-get update && \
     texlive-latex-extra \
     wget \
     r-base && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update && \
+    rm -rf /var/lib/apt/lists/* && \
     apt-get install -y \
     r-cran-plyr \
     r-cran-car 
@@ -75,8 +68,8 @@ EXPOSE 4848 8009 8080 8181 6311
 
 # Download and copy MetaboAnalyst war file to deployment directory
 
-ENV METABOANALYST_VERSION 4.53
-ENV METABOANALYST_LINK https://www.dropbox.com/s/huu0g35wp45v7ih/MetaboAnalyst-4.61.war?dl=0
+ENV METABOANALYST_VERSION 4.93
+ENV METABOANALYST_LINK https://www.dropbox.com/s/9xo4yy3gzqsvyj9/MetaboAnalyst-4.93.war?dl=0
 ENV METABOANALYST_FILE_NAME MetaboAnalyst.war
 
 RUN wget --quiet -O $DEPLOY_DIR/$METABOANALYST_FILE_NAME $METABOANALYST_LINK

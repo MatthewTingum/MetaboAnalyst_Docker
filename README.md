@@ -30,10 +30,10 @@ As Docker was built with the intention of running a single processes, the Metabo
 $ cd ~/Desktop/Metab4_Docker
 
 ### Step 2: Build the Dockerfile, note this will take a long time (30 mins / 1 hour) as several packages need to be installed
-$ docker build -t metab_docker .
+$ sudo docker build -t metab_docker .
 
 ### Step 3: Run the Dockerfile, the -ti option will open an interactive Ubuntu terminal into the created container and presents a command prompt
-$ docker run -ti --rm --name METAB_DOCKER -p 8080:8080 metab_docker
+$ sudo docker run -ti --rm --name METAB_DOCKER -p 8080:8080 metab_docker
 
 ## The command prompt will look something like below; you are now in the shell
 root@760b678fd4bf:/# 
@@ -46,7 +46,7 @@ root@760b678fd4bf:/# Rscript /metab4script.R
 ### Step 5: Enter the command to deploy the MetaboAnalyst WAR file
 root@760b678fd4bf:/# java -jar /opt/payara/payara-micro.jar --deploymentDir /opt/payara/deployments
 
-### Step 6: In your web browser go to the link below. Note that you will have to change the MetaboAnalyst version in the link based on the WAR file 
+### Step 6: In your web browser go to the link below.
 ### The application will take a minute or two to load as the scripts need to be compiled
 http://localhost:8080/MetaboAnalyst/
 
@@ -54,7 +54,9 @@ http://localhost:8080/MetaboAnalyst/
 From the terminal, use Ctrl-c to exit the Payara session, and then Ctrl-d to exit the docker container.
 
 ```
-### Step 4. MetaboAnalyst Docker History
+### MetaboAnalyst Docker History
+
+08-27-2019: Switched from Oracle to Zulu + updated to MetaboAnalyst 4.93
 
 11-23-2018: Bug fixing + updated to MetaboAnalyst 4.39
 
